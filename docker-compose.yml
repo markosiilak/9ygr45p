@@ -1,0 +1,42 @@
+services:
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        image: ${BACKEND_IMAGE_NAME:-piletitasku-backend}
+        ports:
+            - '${BACKEND_PORT:-8000}:8000'
+        volumes:
+            - './backend:/var/www/html'
+        environment:
+            APP_ENV: ${BACKEND_APP_ENV:-local}
+            APP_DEBUG: ${BACKEND_APP_DEBUG:-true}
+            DB_CONNECTION: ${BACKEND_DB_CONNECTION:-sqlite}
+            BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:8000}
+        networks:
+            - ${DOCKER_NETWORK_NAME:-piletitasku-network}
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        image: ${FRONTEND_IMAGE_NAME:-piletitasku-frontend}
+        ports:
+            - '${FRONTEND_PORT:-3000}:3000'
+        volumes:
+            - './frontend:/app'
+            - '/app/node_modules'
+        environment:
+            # Client-side requests (browser makes requests to host)
+            NUXT_API_BASE_URL: ${FRONTEND_API_BASE_URL}
+            # Server-side requests use backend service name (Docker internal network)
+            NUXT_API_BASE_URL_SERVER: ${FRONTEND_API_BASE_URL_SERVER}
+        depends_on:
+            - backend
+        networks:
+            - ${DOCKER_NETWORK_NAME:-piletitasku-network}
+
+networks:
+    piletitasku-network:
+        name: ${DOCKER_NETWORK_NAME:-piletitasku-network}
+        driver: ${DOCKER_NETWORK_DRIVER:-bridge}
