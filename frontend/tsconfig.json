@@ -1,0 +1,30 @@
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "files": [],
+  "references": [
+    { "path": "./.nuxt/tsconfig.app.json" },
+    { "path": "./.nuxt/tsconfig.server.json" },
+    { "path": "./.nuxt/tsconfig.shared.json" },
+    { "path": "./.nuxt/tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["app/components/*"],
+      "@composables/*": ["app/composables/*"],
+      "@assets/*": ["app/assets/*"],
+      "@pages/*": ["app/pages/*"],
+      "@layouts/*": ["app/layouts/*"],
+      "@utils/*": ["app/utils/*"],
+      "@locales/*": ["app/locales/*"],
+      "@types": ["app/types"],
+      "@types/*": ["app/types/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./app/types"]
+  },
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/*.vue"
+  ]
+}
