@@ -1,0 +1,35 @@
+{
+  "name": "piletitasku",
+  "version": "1.0.0",
+  "description": "Ticket Discovery Portal - A simple ticket discovery portal built with Nuxt.js and Laravel",
+  "private": true,
+  "scripts": {
+    "setup": "bash setup.sh",
+    "setup:windows": "setup.bat",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "docker:backend": "docker compose build backend",
+    "docker:frontend": "docker compose build frontend",
+    "docker:up": "docker compose up -d --build backend",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:restart": "docker compose restart",
+    "migrate": "docker compose exec backend php artisan migrate",
+    "seed": "docker compose exec backend php artisan migrate --force && docker compose exec backend php artisan db:seed --force",
+    "migrate:fresh": "docker compose exec backend php artisan migrate:fresh --seed"
+  },
+  "keywords": [
+    "ticket",
+    "discovery",
+    "portal",
+    "nuxt",
+    "laravel",
+    "docker"
+  ],
+  "author": {
+    "name": "Marko Siilak",
+    "email": "marko@siilak.com"
+  },
+  "license": "ISC"
+}
+
