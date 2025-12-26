@@ -1,0 +1,5 @@
+export { default as EventCard } from './EventCard.vue'
+export { default as EventsList } from './EventsList.vue'
+export { default as FeaturedEventsSidebar } from './FeaturedEventsSidebar.vue'
+export { default as TicketSelector } from './TicketSelector.vue'
+export { default as HeroSwiper } from './HeroSwiper.vue'
