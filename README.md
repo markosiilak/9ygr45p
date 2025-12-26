@@ -46,6 +46,15 @@ Build a simple ticket discovery portal with a frontend and backend.
 
 ### Quick Setup
 
+- Create the frontend env file (run from project root):
+```bash
+cp frontend/.env.example frontend/.env
+```
+- Start the project from the repository root:
+```bash
+docker compose up --build
+```
+
 ```bash
 docker compose up --build
 ```

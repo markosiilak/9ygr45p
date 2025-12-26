@@ -26,9 +26,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Server-side API URL (used by Nuxt server routes)
-    // Use docker/dev environment variables when available, otherwise
-    // fall back to localhost:8000 for local backend development.
-    apiBaseUrl: process.env.NUXT_API_BASE_URL_SERVER || process.env.NUXT_API_BASE_URL || 'http://localhost:8000',
+    apiBaseUrl: 'http://backend:8000',
     // Client-side API URL (used by browser)
     public: {
       apiBaseUrl: process.env.NUXT_API_BASE_URL || 'http://localhost:8000'

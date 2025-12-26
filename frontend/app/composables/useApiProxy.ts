@@ -7,13 +7,10 @@ import { useRuntimeConfig } from '#imports'
  */
 export function createApiProxy(endpoint: string) {
   return defineEventHandler(async (event) => {
-    // Prefer runtime config (set in nuxt.config) but fall back to env for compatibility
-    const config = useRuntimeConfig()
-    const base = config.apiBaseUrl || config.public?.apiBaseUrl || process.env.NUXT_API_BASE_URL_SERVER || process.env.NUXT_API_BASE_URL
+    // Use hardcoded backend URL for Docker container communication
+    const base = 'http://backend:8000'
 
-    if (!base) {
-      throw createError({ statusCode: 500, statusMessage: 'API base URL not configured' })
-    }
+    console.log('Using API base URL:', base, 'for endpoint:', endpoint)
 
     try {
       const url = `${String(base).replace(/\/$/, '')}${endpoint}`
@@ -21,6 +18,7 @@ export function createApiProxy(endpoint: string) {
       return res
     } catch (err: unknown) {
       const error = err as { statusCode?: number, message?: string }
+      console.error('API request failed:', error)
       throw createError({
         statusCode: error?.statusCode || 502,
         statusMessage: error?.message || 'Bad Gateway'
@@ -35,12 +33,10 @@ export function createApiProxy(endpoint: string) {
  */
 export function createApiProxyWithId(endpointTemplate: string, idParam: string = 'id') {
   return defineEventHandler(async (event) => {
-    const config = useRuntimeConfig()
-    const base = config.apiBaseUrl || config.public?.apiBaseUrl || process.env.NUXT_API_BASE_URL_SERVER || process.env.NUXT_API_BASE_URL
+    // Use hardcoded backend URL for Docker container communication
+    const base = 'http://backend:8000'
 
-    if (!base) {
-      throw createError({ statusCode: 500, statusMessage: 'API base URL not configured' })
-    }
+    console.log('Using API base URL:', base, 'for endpoint template:', endpointTemplate)
 
     const idParamValue = event.context?.params?.[idParam] as string | undefined
 
