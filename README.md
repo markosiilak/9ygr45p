@@ -217,3 +217,30 @@ Both services have hot-reload enabled via volume mounts.
 ## License
 
 ISC
+
+
+## Live Demo
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000/api
+- **API Documentation**: See routes/api.php for endpoint details
+
+## Architecture
+
+### Backend (Laravel 12)
+- RESTful API with resource controllers
+- SQLite database for development
+- Sanctum authentication
+- Role-based access control (RBAC)
+- Image upload handling
+
+### Frontend (Nuxt 4)
+- Server-side rendering (SSR)
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Composable-based state management
+- Responsive design with mobile-first approach
+
+---
+
+Built with ❤️ by Marko Siilak
