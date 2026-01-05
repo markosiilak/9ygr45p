@@ -178,7 +178,7 @@ const { setupEventSEO } = useEventSEO({
   event: computed(() => event.value),
   eventId: id,
   eventStatus,
-  siteName: 'PiletiTasku'
+  siteName: 'Ticket'
 })
 
 setupEventSEO()

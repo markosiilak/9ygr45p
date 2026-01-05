@@ -24,7 +24,7 @@ interface EventSEOOptions {
  * ```
  */
 export function useEventSEO(options: EventSEOOptions) {
-  const { event, eventId, eventStatus, siteName = 'PiletiTasku' } = options
+  const { event, eventId, eventStatus, siteName = 'Ticket' } = options
 
   // Generate full event URL
   const eventUrl = computed(() => {
