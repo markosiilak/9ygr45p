@@ -25,6 +25,7 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "app/**/*.vue"
+    "app/**/*.vue",
+    "types/**/*.ts"
   ]
 }

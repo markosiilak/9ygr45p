@@ -74,29 +74,93 @@ check_docker_daemon() {
     print_success "Docker daemon is running"
 }
 
-# Setup environment file
-setup_env() {
-    print_info "Setting up environment file..."
+# Stop and remove existing containers
+cleanup_containers() {
+    print_info "Cleaning up existing containers and images..."
+    
+    # Check if containers exist
+    if docker ps -a | grep -q "piletitasku"; then
+        print_info "Stopping and removing existing containers..."
+        $DOCKER_COMPOSE_CMD down --remove-orphans 2>/dev/null || true
+        
+        # Force remove any remaining containers
+        docker ps -a | grep "piletitasku" | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
+        
+        print_success "Existing containers stopped and removed"
+    else
+        print_info "No existing containers found"
+    fi
+    
+    # Check if images exist
+    if docker images | grep -q "piletitasku"; then
+        print_info "Removing existing Docker images..."
+        docker images | grep "piletitasku" | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
+        print_success "Existing Docker images removed"
+    else
+        print_info "No existing images found"
+    fi
+}
+
+# Setup root environment file
+setup_root_env() {
+    print_info "Setting up root .env file..."
     if [ ! -f .env ]; then
         if [ -f .env.example ]; then
             cp .env.example .env
             print_success "Created .env file from .env.example"
-            print_warning "Please review and update .env file if needed"
         else
             print_error ".env.example file not found!"
             exit 1
         fi
     else
-        print_info ".env file already exists, skipping..."
+        print_info "Root .env file already exists, skipping..."
+    fi
+}
+
+# Setup backend environment file
+setup_backend_env() {
+    print_info "Setting up backend .env file..."
+    if [ ! -f backend/.env ]; then
+        if [ -f backend/.env.example ]; then
+            cp backend/.env.example backend/.env
+            print_success "Created backend/.env file from backend/.env.example"
+        else
+            print_warning "backend/.env.example file not found, skipping..."
+        fi
+    else
+        print_info "Backend .env file already exists, skipping..."
+    fi
+}
+
+# Setup frontend environment file
+setup_frontend_env() {
+    print_info "Setting up frontend .env file..."
+    if [ ! -f frontend/.env ]; then
+        if [ -f frontend/.env.example ]; then
+            cp frontend/.env.example frontend/.env
+            print_success "Created frontend/.env file from frontend/.env.example"
+        else
+            print_warning "frontend/.env.example file not found, skipping..."
+        fi
+    else
+        print_info "Frontend .env file already exists, skipping..."
     fi
 }
 
 # Build and start Docker containers
 start_containers() {
-    print_info "Building and starting Docker containers..."
+    print_info "Building Docker containers from scratch (no cache)..."
     print_info "This may take a few minutes on first run..."
     
-    if $DOCKER_COMPOSE_CMD up -d --build; then
+    if $DOCKER_COMPOSE_CMD build --no-cache; then
+        print_success "Docker images built successfully"
+    else
+        print_error "Failed to build Docker images"
+        exit 1
+    fi
+    
+    print_info "Starting Docker containers..."
+    if $DOCKER_COMPOSE_CMD up -d --force-recreate; then
         print_success "Docker containers started successfully"
     else
         print_error "Failed to start Docker containers"
@@ -125,6 +189,37 @@ wait_for_services() {
     
     if [ $attempt -eq $max_attempts ]; then
         print_warning "Backend service may not be fully ready, but continuing..."
+    fi
+}
+
+# Install Composer dependencies
+install_composer_dependencies() {
+    print_info "Installing Composer dependencies..."
+    if $DOCKER_COMPOSE_CMD exec -T backend composer install --no-interaction --optimize-autoloader; then
+        print_success "Composer dependencies installed"
+    else
+        print_error "Failed to install Composer dependencies"
+        exit 1
+    fi
+}
+
+# Generate Laravel app key
+generate_app_key() {
+    print_info "Generating Laravel application key..."
+    if $DOCKER_COMPOSE_CMD exec -T backend php artisan key:generate --force; then
+        print_success "Laravel application key generated"
+    else
+        print_warning "Failed to generate Laravel app key"
+    fi
+}
+
+# Create storage directories and set permissions
+setup_storage() {
+    print_info "Setting up storage directories..."
+    if $DOCKER_COMPOSE_CMD exec -T backend php artisan storage:link &> /dev/null; then
+        print_success "Storage linked successfully"
+    else
+        print_info "Storage link already exists or not needed"
     fi
 }
 
@@ -181,9 +276,15 @@ main() {
     check_docker
     check_docker_compose
     check_docker_daemon
-    setup_env
+    cleanup_containers
+    setup_root_env
+    setup_backend_env
+    setup_frontend_env
     start_containers
     wait_for_services
+    install_composer_dependencies
+    generate_app_key
+    setup_storage
     run_migrations
     seed_database
     display_info

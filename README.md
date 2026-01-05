@@ -46,23 +46,27 @@ Build a simple ticket discovery portal with a frontend and backend.
 
 ### Quick Setup
 
-- Create the frontend env file (run from project root):
-```bash
-cp frontend/.env.example frontend/.env
 ```
 - Start the project from the repository root:
-```bash
-docker compose up --build
-```
 
-```bash
-docker compose up --build
-```
-
-Or use the setup script for a guided setup:
 ```bash
 npm run setup
 ```
+
+This command runs `setup.sh` which performs the following steps:
+1. Verifies Docker and Docker Compose installation
+2. Checks if Docker daemon is running
+3. Cleans up any existing containers
+4. Creates `.env` files from `.env.example` templates
+5. Builds Docker images from scratch (no cache)
+6. Starts all containers
+7. Installs backend Composer dependencies
+8. Generates Laravel application key
+9. Sets up storage symlinks
+10. Runs database migrations
+11. Seeds the database with test data
+
+The entire setup takes a few minutes on first run.
 
 ### Access URLs
 

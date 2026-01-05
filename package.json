@@ -12,6 +12,7 @@
     "docker:frontend": "docker compose build frontend",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down",
+    "docker:clean": "docker compose down --remove-orphans && docker ps -a | grep piletitasku | awk '{print $1}' | xargs -r docker rm -f",
     "docker:logs": "docker compose logs -f",
     "docker:restart": "docker compose restart",
     "migrate": "docker compose exec backend php artisan migrate",
@@ -30,6 +31,8 @@
     "name": "Marko Siilak",
     "email": "marko@siilak.com"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.3"
+  }
 }
-
