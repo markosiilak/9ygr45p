@@ -151,7 +151,7 @@ After seeding, these accounts are available:
 ## Project Structure
 
 ```
-piletitasku/
+ticket/
 ├── frontend/          # Nuxt.js application
 │   ├── app/
 │   │   ├── components/  # Vue components

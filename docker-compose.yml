@@ -3,7 +3,7 @@ services:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        image: ${BACKEND_IMAGE_NAME:-piletitasku-backend}
+        image: ${BACKEND_IMAGE_NAME:-ticket-backend}
         ports:
             - '${BACKEND_PORT:-8000}:8000'
         volumes:
@@ -14,13 +14,13 @@ services:
             DB_CONNECTION: ${BACKEND_DB_CONNECTION:-sqlite}
             BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:8000}
         networks:
-            - ${DOCKER_NETWORK_NAME:-piletitasku-network}
+            - ${DOCKER_NETWORK_NAME:-ticket-network}
 
     frontend:
         build:
             context: ./frontend
             dockerfile: Dockerfile
-        image: ${FRONTEND_IMAGE_NAME:-piletitasku-frontend}
+        image: ${FRONTEND_IMAGE_NAME:-ticket-frontend}
         ports:
             - '${FRONTEND_PORT:-3000}:3000'
         volumes:
@@ -34,9 +34,9 @@ services:
         depends_on:
             - backend
         networks:
-            - ${DOCKER_NETWORK_NAME:-piletitasku-network}
+            - ${DOCKER_NETWORK_NAME:-ticket-network}
 
 networks:
-    piletitasku-network:
-        name: ${DOCKER_NETWORK_NAME:-piletitasku-network}
+    ticket-network:
+        name: ${DOCKER_NETWORK_NAME:-ticket-network}
         driver: ${DOCKER_NETWORK_DRIVER:-bridge}

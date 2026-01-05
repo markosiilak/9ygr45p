@@ -79,12 +79,12 @@ cleanup_containers() {
     print_info "Cleaning up existing containers and images..."
     
     # Check if containers exist
-    if docker ps -a | grep -q "piletitasku"; then
+    if docker ps -a | grep -q "ticket"; then
         print_info "Stopping and removing existing containers..."
         $DOCKER_COMPOSE_CMD down --remove-orphans 2>/dev/null || true
         
         # Force remove any remaining containers
-        docker ps -a | grep "piletitasku" | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
+        docker ps -a | grep "ticket" | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
         
         print_success "Existing containers stopped and removed"
     else
@@ -92,9 +92,9 @@ cleanup_containers() {
     fi
     
     # Check if images exist
-    if docker images | grep -q "piletitasku"; then
+    if docker images | grep -q "ticket"; then
         print_info "Removing existing Docker images..."
-        docker images | grep "piletitasku" | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
+        docker images | grep "ticket" | awk '{print $3}' | xargs -r docker rmi -f 2>/dev/null || true
         print_success "Existing Docker images removed"
     else
         print_info "No existing images found"
@@ -179,7 +179,7 @@ wait_for_services() {
     local attempt=0
     
     while [ $attempt -lt $max_attempts ]; do
-        if docker exec piletitasku-backend-1 php artisan --version &> /dev/null 2>&1; then
+        if docker exec ticket-backend-1 php artisan --version &> /dev/null 2>&1; then
             print_success "Backend service is ready"
             break
         fi

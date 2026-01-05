@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import type { CartItem } from '@types'
 
-const STORAGE_KEY = 'piletitasku_cart'
+const STORAGE_KEY = 'ticket_cart'
 
 export const useCart = () => {
   const stored = import.meta.client ? localStorage.getItem(STORAGE_KEY) : null
