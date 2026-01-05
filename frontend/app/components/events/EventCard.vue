@@ -24,7 +24,7 @@
 
     <!-- Floating badges (top left) -->
     <div class="badges-container">
-      <StatusBadge
+      <UiStatusBadge
         v-if="eventStatus"
         :status="eventStatus"
         :label="statusLabel"

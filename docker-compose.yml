@@ -9,8 +9,8 @@ services:
         volumes:
             - './backend:/var/www/html'
         environment:
-            APP_ENV: ${BACKEND_APP_ENV:-local}
-            APP_DEBUG: ${BACKEND_APP_DEBUG:-true}
+            APP_ENV: ${BACKEND_APP_ENV:-production}
+            APP_DEBUG: ${BACKEND_APP_DEBUG:-false}
             DB_CONNECTION: ${BACKEND_DB_CONNECTION:-sqlite}
             BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:8000}
         networks:
